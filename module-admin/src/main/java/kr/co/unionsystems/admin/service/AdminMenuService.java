@@ -42,6 +42,22 @@ public class AdminMenuService {
         }
     }
 
+    /**
+     * 공개 API용: is_exposed=true인 메뉴만 트리로 반환 (인증 불필요)
+     */
+    @Transactional(readOnly = true)
+    public List<MenuResponse> getPublicMenuTree(String site) {
+        String normalized = siteAccessValidator.normalizeSite(site);
+
+        if ("union".equals(normalized)) {
+            return buildTree(unionMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
+                    .map(this::toUnionResponse).collect(Collectors.toList()));
+        } else {
+            return buildTree(datawareMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
+                    .map(this::toDatawareResponse).collect(Collectors.toList()));
+        }
+    }
+
     @Transactional
     public MenuResponse createMenu(String site, MenuRequest request) {
         siteAccessValidator.validateWriteAccess(site);
