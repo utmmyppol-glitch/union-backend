@@ -50,10 +50,10 @@ public class AdminMenuService {
         String normalized = siteAccessValidator.normalizeSite(site);
 
         if ("union".equals(normalized)) {
-            return buildTree(unionMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
+            return buildTreeDropOrphans(unionMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
                     .map(this::toUnionResponse).collect(Collectors.toList()));
         } else {
-            return buildTree(datawareMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
+            return buildTreeDropOrphans(datawareMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
                     .map(this::toDatawareResponse).collect(Collectors.toList()));
         }
     }
@@ -139,6 +139,14 @@ public class AdminMenuService {
     }
 
     private List<MenuResponse> buildTree(List<MenuResponse> flatList) {
+        return buildTreeInternal(flatList, false);
+    }
+
+    private List<MenuResponse> buildTreeDropOrphans(List<MenuResponse> flatList) {
+        return buildTreeInternal(flatList, true);
+    }
+
+    private List<MenuResponse> buildTreeInternal(List<MenuResponse> flatList, boolean dropOrphans) {
         Map<Long, MenuResponse> map = new LinkedHashMap<>();
         for (MenuResponse m : flatList) {
             m.setChildren(new ArrayList<>());
@@ -152,9 +160,10 @@ public class AdminMenuService {
                 MenuResponse parent = map.get(m.getParentId());
                 if (parent != null) {
                     parent.getChildren().add(m);
-                } else {
+                } else if (!dropOrphans) {
                     roots.add(m);
                 }
+                // dropOrphans=true면 부모가 숨겨진 자식은 버림
             }
         }
         return roots;
