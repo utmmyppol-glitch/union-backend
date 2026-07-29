@@ -91,6 +91,20 @@ public class AdminContentService {
     }
 
     @Transactional(readOnly = true)
+    public List<ContentResponse> getAllContents(String site) {
+        siteAccessValidator.validateSiteAccess(site);
+        String normalized = siteAccessValidator.normalizeSite(site);
+
+        if ("union".equals(normalized)) {
+            return unionContentRepo.findAllByOrderByIdAsc().stream()
+                    .map(this::toUnionResponse).collect(Collectors.toList());
+        } else {
+            return datawareContentRepo.findAllByOrderByIdAsc().stream()
+                    .map(this::toDatawareResponse).collect(Collectors.toList());
+        }
+    }
+
+    @Transactional(readOnly = true)
     public List<ContentResponse> getContentsByMenu(String site, Long menuId) {
         siteAccessValidator.validateSiteAccess(site);
         String normalized = siteAccessValidator.normalizeSite(site);

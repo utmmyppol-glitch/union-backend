@@ -22,8 +22,11 @@ public class ContentAdminController {
     @GetMapping
     public ResponseEntity<List<ContentResponse>> getContents(
             @PathVariable String site,
-            @RequestParam Long menuId) {
-        return ResponseEntity.ok(adminContentService.getContentsByMenu(site, menuId));
+            @RequestParam(required = false) Long menuId) {
+        if (menuId != null) {
+            return ResponseEntity.ok(adminContentService.getContentsByMenu(site, menuId));
+        }
+        return ResponseEntity.ok(adminContentService.getAllContents(site));
     }
 
     @GetMapping("/detail")
