@@ -40,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/dataware/config").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/menu").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/menu").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/union/content").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dataware/content").permitAll()
 
                         // ── module-union public GET ──
                         .requestMatchers(HttpMethod.GET, "/api/union/posts/**").permitAll()

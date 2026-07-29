@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +49,29 @@ public class AdminContentService {
         this.datawareContentRepo = datawareContentRepo;
         this.datawareHistoryRepo = datawareHistoryRepo;
         this.siteAccessValidator = siteAccessValidator;
+    }
+
+    /**
+     * 공개 API용: region_key 목록으로 content 조회. key→bodyHtml Map 반환.
+     * keys가 null이면 전체 반환.
+     */
+    @Transactional(readOnly = true)
+    public Map<String, String> getPublicContent(String site, List<String> keys) {
+        String normalized = siteAccessValidator.normalizeSite(site);
+        Map<String, String> result = new HashMap<>();
+
+        if ("union".equals(normalized)) {
+            var contents = (keys != null && !keys.isEmpty())
+                    ? unionContentRepo.findByRegionKeyIn(keys)
+                    : unionContentRepo.findAllByOrderByIdAsc();
+            contents.forEach(c -> result.put(c.getRegionKey(), c.getBodyHtml()));
+        } else {
+            var contents = (keys != null && !keys.isEmpty())
+                    ? datawareContentRepo.findByRegionKeyIn(keys)
+                    : datawareContentRepo.findAllByOrderByIdAsc();
+            contents.forEach(c -> result.put(c.getRegionKey(), c.getBodyHtml()));
+        }
+        return result;
     }
 
     @Transactional(readOnly = true)

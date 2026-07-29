@@ -13,4 +13,8 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
     Optional<Content> findByMenuIdAndRegionKey(Long menuId, String regionKey);
 
     List<Content> findByMenuId(Long menuId);
+
+    List<Content> findByRegionKeyIn(List<String> regionKeys);
+
+    List<Content> findAllByOrderByIdAsc();
 }
