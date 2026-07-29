@@ -35,6 +35,10 @@ public class SecurityConfig {
                         // Allow CORS preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                        // ── site config public GET ──
+                        .requestMatchers(HttpMethod.GET, "/api/union/config").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dataware/config").permitAll()
+
                         // ── module-union public GET ──
                         .requestMatchers(HttpMethod.GET, "/api/union/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/customer-stories/**").permitAll()

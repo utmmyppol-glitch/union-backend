@@ -25,7 +25,7 @@ spring:
       mail.smtp.starttls.enable: true
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ${JWT_SECRET:dev-only-do-not-use-in-production-87e4f7f192098900483d30d5a1297047}
   expiration-ms: ${JWT_EXPIRATION_MS:7200000}
 
 server:
