@@ -5,6 +5,8 @@ import kr.co.unionsystems.admin.dto.ContentHistoryResponse;
 import kr.co.unionsystems.admin.dto.ContentRequest;
 import kr.co.unionsystems.admin.dto.ContentResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,17 @@ public class AdminContentService {
     private final kr.co.unionsystems.dataware.repository.ContentRepository datawareContentRepo;
     private final kr.co.unionsystems.dataware.repository.ContentHistoryRepository datawareHistoryRepo;
     private final SiteAccessValidator siteAccessValidator;
+
+    private static final Safelist HTML_SAFELIST = Safelist.relaxed()
+            .addTags("div", "span", "section", "article", "header", "footer", "nav", "figure", "figcaption")
+            .addAttributes(":all", "class", "style", "id")
+            .addAttributes("img", "src", "alt", "width", "height", "loading")
+            .addAttributes("a", "href", "target", "rel")
+            .addProtocols("img", "src", "http", "https", "data");
+
+    private String sanitizeHtml(String html) {
+        return html == null ? null : Jsoup.clean(html, HTML_SAFELIST);
+    }
 
     public AdminContentService(
             @Qualifier("unionContentRepository") kr.co.unionsystems.union.repository.ContentRepository unionContentRepo,
@@ -94,7 +107,7 @@ public class AdminContentService {
                         .build());
             }
             content.setTitle(request.getTitle());
-            content.setBodyHtml(request.getBodyHtml());
+            content.setBodyHtml(sanitizeHtml(request.getBodyHtml()));
             content.setUpdatedBy(adminId);
             return toUnionResponse(unionContentRepo.save(content));
         } else {
@@ -102,7 +115,7 @@ public class AdminContentService {
                     .menuId(request.getMenuId())
                     .regionKey(request.getRegionKey())
                     .title(request.getTitle())
-                    .bodyHtml(request.getBodyHtml())
+                    .bodyHtml(sanitizeHtml(request.getBodyHtml()))
                     .updatedBy(adminId)
                     .build();
             return toUnionResponse(unionContentRepo.save(content));
@@ -123,7 +136,7 @@ public class AdminContentService {
                         .build());
             }
             content.setTitle(request.getTitle());
-            content.setBodyHtml(request.getBodyHtml());
+            content.setBodyHtml(sanitizeHtml(request.getBodyHtml()));
             content.setUpdatedBy(adminId);
             return toDatawareResponse(datawareContentRepo.save(content));
         } else {
@@ -131,7 +144,7 @@ public class AdminContentService {
                     .menuId(request.getMenuId())
                     .regionKey(request.getRegionKey())
                     .title(request.getTitle())
-                    .bodyHtml(request.getBodyHtml())
+                    .bodyHtml(sanitizeHtml(request.getBodyHtml()))
                     .updatedBy(adminId)
                     .build();
             return toDatawareResponse(datawareContentRepo.save(content));

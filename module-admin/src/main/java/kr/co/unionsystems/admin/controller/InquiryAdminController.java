@@ -1,5 +1,6 @@
 package kr.co.unionsystems.admin.controller;
 
+import jakarta.validation.Valid;
 import kr.co.unionsystems.admin.dto.InquiryAdminResponse;
 import kr.co.unionsystems.admin.dto.InquiryAnswerRequest;
 import kr.co.unionsystems.admin.service.AdminInquiryService;
@@ -35,7 +36,7 @@ public class InquiryAdminController {
     public ResponseEntity<InquiryAdminResponse> updateInquiry(
             @PathVariable String site,
             @PathVariable Long id,
-            @RequestBody InquiryAnswerRequest request) {
+            @Valid @RequestBody InquiryAnswerRequest request) {
         return ResponseEntity.ok(adminInquiryService.updateInquiry(site, id, request));
     }
 }

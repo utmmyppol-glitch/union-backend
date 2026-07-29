@@ -1,5 +1,6 @@
 package kr.co.unionsystems.union.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,5 +33,6 @@ public class InquiryRequest {
     private String product;
 
     @NotNull(message = "개인정보 수집 동의는 필수입니다")
+    @AssertTrue(message = "개인정보 수집에 동의해야 합니다")
     private Boolean consentPrivacy;
 }

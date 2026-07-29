@@ -64,8 +64,6 @@ public class GlobalExceptionHandler {
         response.put("timestamp", LocalDateTime.now());
         response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.put("message", "서버 내부 오류가 발생했습니다");
-        response.put("detail", ex.getMessage());
-        response.put("type", ex.getClass().getSimpleName());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
