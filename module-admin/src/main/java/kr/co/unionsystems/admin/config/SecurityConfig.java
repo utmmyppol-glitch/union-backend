@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/dataware/menu").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/content").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/content").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/union/page-layout/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dataware/page-layout/**").permitAll()
                         // structured data public GET
                         .requestMatchers(HttpMethod.GET, "/api/union/history").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/partners").permitAll()
