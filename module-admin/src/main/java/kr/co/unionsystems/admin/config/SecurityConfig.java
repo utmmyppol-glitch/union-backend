@@ -42,6 +42,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/dataware/menu").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/content").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/content").permitAll()
+                        // structured data public GET
+                        .requestMatchers(HttpMethod.GET, "/api/union/history").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/union/partners").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/union/glossary").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dataware/pricing-plans").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dataware/education-sessions").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dataware/download-resources").permitAll()
 
                         // ── module-union public GET ──
                         .requestMatchers(HttpMethod.GET, "/api/union/posts/**").permitAll()
