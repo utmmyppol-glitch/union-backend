@@ -34,6 +34,8 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         // Allow CORS preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Uploaded files (public read)
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
 
                         // ── site config & menu public GET ──
                         .requestMatchers(HttpMethod.GET, "/api/union/config").permitAll()

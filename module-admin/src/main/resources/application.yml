@@ -15,6 +15,10 @@ spring:
       hibernate:
         format_sql: true
         default_schema: public
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
