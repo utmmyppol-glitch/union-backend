@@ -19,8 +19,10 @@ public class ProductAdminController {
     private final AdminProductService adminProductService;
 
     @GetMapping
-    public ResponseEntity<List<ProductAdminResponse>> getProducts(@PathVariable String site) {
-        return ResponseEntity.ok(adminProductService.getProducts(site));
+    public ResponseEntity<List<ProductAdminResponse>> getProducts(
+            @PathVariable String site,
+            @RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(adminProductService.getProducts(site, keyword));
     }
 
     @GetMapping("/{id}")
@@ -41,6 +43,17 @@ public class ProductAdminController {
             @PathVariable String site, @PathVariable Long id,
             @Valid @RequestBody ProductAdminRequest request) {
         return ResponseEntity.ok(adminProductService.updateProduct(site, id, request));
+    }
+
+    @PatchMapping("/{id}/published")
+    public ResponseEntity<ProductAdminResponse> togglePublished(
+            @PathVariable String site, @PathVariable Long id,
+            @RequestBody java.util.Map<String, Boolean> body) {
+        Boolean published = body.get("published");
+        if (published == null) {
+            throw new IllegalArgumentException("published 값은 필수입니다");
+        }
+        return ResponseEntity.ok(adminProductService.togglePublished(site, id, published));
     }
 
     @DeleteMapping("/{id}")

@@ -27,11 +27,17 @@ public class AdminPostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostAdminResponse> getPosts(String site, Pageable pageable) {
+    public Page<PostAdminResponse> getPosts(String site, String keyword, Pageable pageable) {
         siteAccessValidator.validateSiteAccess(site);
         String s = siteAccessValidator.normalizeSite(site);
         if ("union".equals(s)) {
+            if (keyword != null && !keyword.isBlank()) {
+                return unionPostRepo.searchByKeyword(keyword.trim(), pageable).map(this::fromUnion);
+            }
             return unionPostRepo.findAllByOrderByCreatedAtDesc(pageable).map(this::fromUnion);
+        }
+        if (keyword != null && !keyword.isBlank()) {
+            return datawarePostRepo.searchByKeyword(keyword.trim(), pageable).map(this::fromDataware);
         }
         return datawarePostRepo.findAllByOrderByCreatedAtDesc(pageable).map(this::fromDataware);
     }
@@ -93,6 +99,22 @@ public class AdminPostService {
         if (req.getCategory() != null) post.setCategory(kr.co.unionsystems.dataware.entity.Post.PostCategory.valueOf(req.getCategory()));
         post.setThumbnailUrl(req.getThumbnailUrl());
         if (req.getPublished() != null) post.setPublished(req.getPublished());
+        return fromDataware(datawarePostRepo.save(post));
+    }
+
+    @Transactional
+    public PostAdminResponse togglePublished(String site, Long id, boolean published) {
+        siteAccessValidator.validateWriteAccess(site);
+        String s = siteAccessValidator.normalizeSite(site);
+        if ("union".equals(s)) {
+            var post = unionPostRepo.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
+            post.setPublished(published);
+            return fromUnion(unionPostRepo.save(post));
+        }
+        var post = datawarePostRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
+        post.setPublished(published);
         return fromDataware(datawarePostRepo.save(post));
     }
 

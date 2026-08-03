@@ -37,7 +37,11 @@ public class InquiryService {
         Inquiry saved = inquiryRepository.save(inquiry);
         log.info("New inquiry created: id={}, company={}", saved.getId(), saved.getCompany());
 
-        emailService.sendInquiryNotification(saved);
+        try {
+            emailService.sendInquiryNotification(saved);
+        } catch (Exception e) {
+            log.warn("Email notification failed (non-critical): {}", e.getMessage());
+        }
 
         return InquiryResponse.from(saved);
     }
