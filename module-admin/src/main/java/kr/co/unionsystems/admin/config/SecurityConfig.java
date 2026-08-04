@@ -27,6 +27,7 @@ public class SecurityConfig {
 
     private final CorsConfigurationSource corsConfigurationSource;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AdminAccessFilter adminAccessFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -61,6 +62,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/dataware/download-resources").permitAll()
 
                         // ── module-union public GET ──
+                        .requestMatchers(HttpMethod.GET, "/api/union/insights").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/customer-stories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/banners/**").permitAll()
@@ -128,7 +130,8 @@ public class SecurityConfig {
                         })
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(adminAccessFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }

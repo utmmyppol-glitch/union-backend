@@ -9,10 +9,7 @@
 
 INSERT INTO common.admins (username, password, role, site) VALUES
 -- 비밀번호: admin123!
-('admin',    '$2a$10$uTmCLAca6WNYIWS951JeyuzqOmTl3YIm2Ob5EQkNyKwQMOdUNwQoS', 'SUPER',  NULL),
-('union_editor', '$2a$10$uTmCLAca6WNYIWS951JeyuzqOmTl3YIm2Ob5EQkNyKwQMOdUNwQoS', 'EDITOR', 'UNION'),
-('dw_editor',    '$2a$10$uTmCLAca6WNYIWS951JeyuzqOmTl3YIm2Ob5EQkNyKwQMOdUNwQoS', 'EDITOR', 'DATAWARE'),
-('viewer',       '$2a$10$dummyHashedPasswordForDevOnly000000000000000000', 'VIEWER', NULL);
+('admin', '$2a$10$uTmCLAca6WNYIWS951JeyuzqOmTl3YIm2Ob5EQkNyKwQMOdUNwQoS', 'SUPER', NULL);
 
 -- =============================================
 -- UNION_SCHEMA
