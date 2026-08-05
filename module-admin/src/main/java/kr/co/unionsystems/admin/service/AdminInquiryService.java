@@ -90,6 +90,7 @@ public class AdminInquiryService {
                 .phone(i.getPhone()).email(i.getEmail()).message(i.getMessage())
                 .product(i.getProduct()).status(i.getStatus().name())
                 .assignee(i.getAssignee())
+                .consentPrivacy(i.getConsentPrivacy())
                 .createdAt(i.getCreatedAt()).updatedAt(i.getUpdatedAt())
                 .build();
     }
@@ -100,6 +101,7 @@ public class AdminInquiryService {
                 .phone(i.getPhone()).email(i.getEmail()).message(i.getMessage())
                 .product(i.getProduct()).status(i.getStatus().name())
                 .assignee(i.getAssignee())
+                .consentPrivacy(i.getConsentPrivacy())
                 .createdAt(i.getCreatedAt()).updatedAt(i.getUpdatedAt())
                 .build();
     }
