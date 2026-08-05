@@ -56,7 +56,8 @@ public class AdminProductService {
                 .name(req.getName()).slug(req.getSlug())
                 .category(Product.ProductCategory.valueOf(req.getCategory()))
                 .subtitle(req.getSubtitle()).description(req.getDescription())
-                .features(req.getFeatures()).iconUrl(req.getIconUrl())
+                .features(req.getFeatures()).detailJson(req.getDetailJson())
+                .iconUrl(req.getIconUrl())
                 .thumbnailUrl(req.getThumbnailUrl()).certification(req.getCertification())
                 .sortOrder(req.getSortOrder())
                 .published(req.getPublished() != null ? req.getPublished() : true).build();
@@ -74,6 +75,7 @@ public class AdminProductService {
         product.setSubtitle(req.getSubtitle());
         product.setDescription(req.getDescription());
         product.setFeatures(req.getFeatures());
+        product.setDetailJson(req.getDetailJson());
         product.setIconUrl(req.getIconUrl());
         product.setThumbnailUrl(req.getThumbnailUrl());
         product.setCertification(req.getCertification());
@@ -102,6 +104,7 @@ public class AdminProductService {
                 .id(p.getId()).name(p.getName()).slug(p.getSlug())
                 .category(p.getCategory().name()).subtitle(p.getSubtitle())
                 .description(p.getDescription()).features(p.getFeatures())
+                .detailJson(p.getDetailJson())
                 .iconUrl(p.getIconUrl()).thumbnailUrl(p.getThumbnailUrl())
                 .certification(p.getCertification()).sortOrder(p.getSortOrder())
                 .published(p.getPublished())

@@ -22,6 +22,9 @@ public class CustomerStory {
     @Column(nullable = false)
     private String company;
 
+    @Column(unique = true)
+    private String slug;
+
     private String industry;
 
     @Column(nullable = false)
@@ -33,6 +36,9 @@ public class CustomerStory {
     private String thumbnailUrl;
 
     private String logoUrl;
+
+    @Column(columnDefinition = "TEXT")
+    private String detailJson;
 
     @Builder.Default
     private Boolean published = false;

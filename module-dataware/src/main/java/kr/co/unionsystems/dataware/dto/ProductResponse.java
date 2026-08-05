@@ -25,6 +25,7 @@ public class ProductResponse {
     private String thumbnailUrl;
     private String certification;
     private Integer sortOrder;
+    private String detailJson;
     private Boolean published;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -41,6 +42,7 @@ public class ProductResponse {
                 .iconUrl(product.getIconUrl())
                 .thumbnailUrl(product.getThumbnailUrl())
                 .certification(product.getCertification())
+                .detailJson(product.getDetailJson())
                 .sortOrder(product.getSortOrder())
                 .published(product.getPublished())
                 .createdAt(product.getCreatedAt())

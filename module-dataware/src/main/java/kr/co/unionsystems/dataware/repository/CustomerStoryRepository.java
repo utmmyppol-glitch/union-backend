@@ -6,8 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository("datawareCustomerStoryRepository")
 public interface CustomerStoryRepository extends JpaRepository<CustomerStory, Long> {
+
+    Optional<CustomerStory> findBySlug(String slug);
 
     Page<CustomerStory> findByPublishedTrueOrderByCreatedAtDesc(Pageable pageable);
 

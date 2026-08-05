@@ -25,6 +25,16 @@ public class CustomerStoryController {
         return ResponseEntity.ok(customerStoryService.getStories(industry, pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerStoryResponse> getStory(@PathVariable Long id) {
+        return ResponseEntity.ok(customerStoryService.getStory(id));
+    }
+
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<CustomerStoryResponse> getStoryBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(customerStoryService.getStoryBySlug(slug));
+    }
+
     @PostMapping
     public ResponseEntity<CustomerStoryResponse> createStory(@RequestBody CustomerStory story) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerStoryService.createStory(story));

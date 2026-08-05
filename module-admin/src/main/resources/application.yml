@@ -19,6 +19,8 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
+  jackson:
+    default-property-inclusion: non_null
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
@@ -35,6 +37,11 @@ jwt:
 server:
   port: ${SERVER_PORT:8080}
   shutdown: graceful
+
+naver:
+  api:
+    key-id: ${NAVER_APIGW_KEY_ID:}
+    key: ${NAVER_APIGW_KEY:}
 
 management:
   endpoints:

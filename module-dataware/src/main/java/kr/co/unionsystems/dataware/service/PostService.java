@@ -39,6 +39,15 @@ public class PostService {
     }
 
     @Transactional
+    public PostResponse getPostBySlug(String slug) {
+        Post post = postRepository.findBySlug(slug)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + slug));
+        post.setViewCount(post.getViewCount() + 1);
+        postRepository.save(post);
+        return PostResponse.from(post);
+    }
+
+    @Transactional
     public PostResponse createPost(Post post) {
         Post saved = postRepository.save(post);
         log.info("Post created: id={}, title={}", saved.getId(), saved.getTitle());
@@ -51,6 +60,7 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
 
         post.setTitle(postData.getTitle());
+        post.setSlug(postData.getSlug());
         post.setContent(postData.getContent());
         post.setExcerpt(postData.getExcerpt());
         post.setCategory(postData.getCategory());

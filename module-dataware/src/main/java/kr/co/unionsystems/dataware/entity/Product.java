@@ -46,6 +46,9 @@ public class Product {
 
     private Integer sortOrder;
 
+    @Column(columnDefinition = "TEXT")
+    private String detailJson;
+
     @Builder.Default
     private Boolean published = true;
 

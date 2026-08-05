@@ -60,17 +60,17 @@ public class AdminPostService {
         String s = siteAccessValidator.normalizeSite(site);
         if ("union".equals(s)) {
             var post = kr.co.unionsystems.union.entity.Post.builder()
-                    .title(req.getTitle()).content(req.getContent()).excerpt(req.getExcerpt())
+                    .title(req.getTitle()).slug(req.getSlug()).content(req.getContent()).excerpt(req.getExcerpt())
                     .category(kr.co.unionsystems.union.entity.Post.PostCategory.valueOf(req.getCategory()))
-                    .thumbnailUrl(req.getThumbnailUrl())
+                    .thumbnailUrl(req.getThumbnailUrl()).detailJson(req.getDetailJson())
                     .published(req.getPublished() != null ? req.getPublished() : false)
                     .build();
             return fromUnion(unionPostRepo.save(post));
         }
         var post = kr.co.unionsystems.dataware.entity.Post.builder()
-                .title(req.getTitle()).content(req.getContent()).excerpt(req.getExcerpt())
+                .title(req.getTitle()).slug(req.getSlug()).content(req.getContent()).excerpt(req.getExcerpt())
                 .category(kr.co.unionsystems.dataware.entity.Post.PostCategory.valueOf(req.getCategory()))
-                .thumbnailUrl(req.getThumbnailUrl())
+                .thumbnailUrl(req.getThumbnailUrl()).detailJson(req.getDetailJson())
                 .published(req.getPublished() != null ? req.getPublished() : false)
                 .build();
         return fromDataware(datawarePostRepo.save(post));
@@ -84,20 +84,24 @@ public class AdminPostService {
             var post = unionPostRepo.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
             post.setTitle(req.getTitle());
+            post.setSlug(req.getSlug());
             post.setContent(req.getContent());
             post.setExcerpt(req.getExcerpt());
             if (req.getCategory() != null) post.setCategory(kr.co.unionsystems.union.entity.Post.PostCategory.valueOf(req.getCategory()));
             post.setThumbnailUrl(req.getThumbnailUrl());
+            post.setDetailJson(req.getDetailJson());
             if (req.getPublished() != null) post.setPublished(req.getPublished());
             return fromUnion(unionPostRepo.save(post));
         }
         var post = datawarePostRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
         post.setTitle(req.getTitle());
+        post.setSlug(req.getSlug());
         post.setContent(req.getContent());
         post.setExcerpt(req.getExcerpt());
         if (req.getCategory() != null) post.setCategory(kr.co.unionsystems.dataware.entity.Post.PostCategory.valueOf(req.getCategory()));
         post.setThumbnailUrl(req.getThumbnailUrl());
+        post.setDetailJson(req.getDetailJson());
         if (req.getPublished() != null) post.setPublished(req.getPublished());
         return fromDataware(datawarePostRepo.save(post));
     }
@@ -128,16 +132,18 @@ public class AdminPostService {
 
     private PostAdminResponse fromUnion(kr.co.unionsystems.union.entity.Post p) {
         return PostAdminResponse.builder()
-                .id(p.getId()).title(p.getTitle()).content(p.getContent()).excerpt(p.getExcerpt())
+                .id(p.getId()).title(p.getTitle()).slug(p.getSlug()).content(p.getContent()).excerpt(p.getExcerpt())
                 .category(p.getCategory().name()).thumbnailUrl(p.getThumbnailUrl())
+                .detailJson(p.getDetailJson())
                 .published(p.getPublished()).viewCount(p.getViewCount())
                 .createdAt(p.getCreatedAt()).updatedAt(p.getUpdatedAt()).build();
     }
 
     private PostAdminResponse fromDataware(kr.co.unionsystems.dataware.entity.Post p) {
         return PostAdminResponse.builder()
-                .id(p.getId()).title(p.getTitle()).content(p.getContent()).excerpt(p.getExcerpt())
+                .id(p.getId()).title(p.getTitle()).slug(p.getSlug()).content(p.getContent()).excerpt(p.getExcerpt())
                 .category(p.getCategory().name()).thumbnailUrl(p.getThumbnailUrl())
+                .detailJson(p.getDetailJson())
                 .published(p.getPublished()).viewCount(p.getViewCount())
                 .createdAt(p.getCreatedAt()).updatedAt(p.getUpdatedAt()).build();
     }
