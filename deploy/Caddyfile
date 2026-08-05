@@ -1,0 +1,7 @@
+{
+	admin off
+}
+
+:8081 {
+	reverse_proxy union-backend-active:8081
+}
