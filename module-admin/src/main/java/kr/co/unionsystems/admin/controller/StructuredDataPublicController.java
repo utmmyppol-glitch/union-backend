@@ -11,7 +11,6 @@ import java.util.List;
  * 공개 API: 구조화 리스트 데이터 (is_active=true만 반환)
  * dataware: education-sessions, download-resources
  * (history, glossary는 module-union 컨트롤러에서 처리)
- * (pricing-plans는 module-dataware 컨트롤러에서 처리)
  */
 @RestController
 public class StructuredDataPublicController {
