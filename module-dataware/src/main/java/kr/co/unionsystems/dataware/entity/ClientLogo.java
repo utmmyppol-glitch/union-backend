@@ -28,6 +28,9 @@ public class ClientLogo {
     @Builder.Default
     private Boolean isActive = true;
 
+    @Builder.Default
+    private Boolean showOnHome = false;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

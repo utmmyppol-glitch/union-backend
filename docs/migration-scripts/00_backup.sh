@@ -62,7 +62,6 @@ UNION ALL SELECT 'union.menu', count(*) FROM union_schema.menu
 UNION ALL SELECT 'union.content', count(*) FROM union_schema.content
 UNION ALL SELECT 'union.site_config', count(*) FROM union_schema.site_config
 UNION ALL SELECT 'union.history', count(*) FROM union_schema.history
-UNION ALL SELECT 'union.partners', count(*) FROM union_schema.partners
 UNION ALL SELECT 'union.glossary', count(*) FROM union_schema.glossary
 UNION ALL SELECT 'dw.banners', count(*) FROM dataware_schema.banners
 UNION ALL SELECT 'dw.products', count(*) FROM dataware_schema.products

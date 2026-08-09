@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class InquiryService {
 
     private final InquiryRepository inquiryRepository;
-    private final EmailService emailService;
 
     @Transactional
     public InquiryResponse createInquiry(InquiryRequest request) {
@@ -35,12 +34,6 @@ public class InquiryService {
 
         Inquiry saved = inquiryRepository.save(inquiry);
         log.info("New inquiry created: id={}, company={}", saved.getId(), saved.getCompany());
-
-        try {
-            emailService.sendInquiryNotification(saved);
-        } catch (Exception e) {
-            log.warn("Email notification failed (non-critical): {}", e.getMessage());
-        }
 
         return InquiryResponse.from(saved);
     }

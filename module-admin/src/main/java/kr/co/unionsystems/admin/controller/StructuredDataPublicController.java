@@ -9,14 +9,13 @@ import java.util.List;
 
 /**
  * 공개 API: 구조화 리스트 데이터 (is_active=true만 반환)
- * union: history, partners, glossary
+ * union: history, glossary
  * dataware: pricing-plans, education-sessions, download-resources
  */
 @RestController
 public class StructuredDataPublicController {
 
     private final kr.co.unionsystems.union.repository.HistoryRepository unionHistoryRepo;
-    private final kr.co.unionsystems.union.repository.PartnerRepository unionPartnerRepo;
     private final kr.co.unionsystems.union.repository.GlossaryRepository unionGlossaryRepo;
     private final kr.co.unionsystems.dataware.repository.PricingPlanRepository datawarePricingRepo;
     private final kr.co.unionsystems.dataware.repository.EducationSessionRepository datawareEduRepo;
@@ -24,13 +23,11 @@ public class StructuredDataPublicController {
 
     public StructuredDataPublicController(
             @Qualifier("unionHistoryRepository") kr.co.unionsystems.union.repository.HistoryRepository unionHistoryRepo,
-            @Qualifier("unionPartnerRepository") kr.co.unionsystems.union.repository.PartnerRepository unionPartnerRepo,
             @Qualifier("unionGlossaryRepository") kr.co.unionsystems.union.repository.GlossaryRepository unionGlossaryRepo,
             @Qualifier("datawarePricingPlanRepository") kr.co.unionsystems.dataware.repository.PricingPlanRepository datawarePricingRepo,
             @Qualifier("datawareEducationSessionRepository") kr.co.unionsystems.dataware.repository.EducationSessionRepository datawareEduRepo,
             @Qualifier("datawareDownloadResourceRepository") kr.co.unionsystems.dataware.repository.DownloadResourceRepository datawareDownloadResRepo) {
         this.unionHistoryRepo = unionHistoryRepo;
-        this.unionPartnerRepo = unionPartnerRepo;
         this.unionGlossaryRepo = unionGlossaryRepo;
         this.datawarePricingRepo = datawarePricingRepo;
         this.datawareEduRepo = datawareEduRepo;
@@ -41,11 +38,6 @@ public class StructuredDataPublicController {
     @GetMapping("/api/union/history")
     public ResponseEntity<?> getHistory() {
         return ResponseEntity.ok(unionHistoryRepo.findAllByIsActiveTrueOrderBySortOrderAsc());
-    }
-
-    @GetMapping("/api/union/partners")
-    public ResponseEntity<?> getPartners() {
-        return ResponseEntity.ok(unionPartnerRepo.findAllByIsActiveTrueOrderBySortOrderAsc());
     }
 
     @GetMapping("/api/union/glossary")

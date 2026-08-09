@@ -6,6 +6,9 @@ logging:
   level:
     kr.co.unionsystems: DEBUG
 
+upload:
+  dir: ${UPLOAD_DIR:./uploads}
+
 cors:
   allowed-origins:
     - http://localhost:3000

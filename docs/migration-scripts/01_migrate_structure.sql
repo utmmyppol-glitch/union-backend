@@ -96,18 +96,6 @@ ON CONFLICT (id) DO NOTHING;
 SELECT setval('union_schema.menu_id_seq', GREATEST(100, (SELECT COALESCE(MAX(id), 0) + 1 FROM union_schema.menu)));
 
 -- =============================================
--- UNION — 파트너
--- =============================================
-INSERT INTO union_schema.partners (name, role, logo_url, sort_order) VALUES
-('Microsoft', 'CSP 공인 파트너', 'https://img.icons8.com/color/96/microsoft.png', 1),
-('Adobe',     '공식 리셀러',     'https://img.icons8.com/color/96/adobe.png', 2),
-('Autodesk',  '공인 리셀러',     'https://img.icons8.com/color/96/autodesk.png', 3),
-('엔코아',    'DA# 공인총판',    '/images/partners/encore.png', 4),
-('AhnLab',    '공식 파트너',     '/images/partners/ahnlab.png', 5),
-('ESTsecurity','기업보안 파트너', '/images/partners/estsecurity.png', 6)
-ON CONFLICT DO NOTHING;
-
--- =============================================
 -- UNION — 용어사전
 -- =============================================
 INSERT INTO union_schema.glossary (term, full_name, definition, category, sort_order) VALUES

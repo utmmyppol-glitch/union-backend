@@ -13,5 +13,6 @@ public class ClientLogoAdminResponse {
     private String logoUrl;
     private Integer sortOrder;
     private Boolean isActive;
+    private Boolean showOnHome;
     private LocalDateTime createdAt;
 }

@@ -42,9 +42,6 @@ SELECT setval('union_schema.site_config_id_seq',
 SELECT setval('union_schema.history_id_seq',
   GREATEST(1, (SELECT COALESCE(MAX(id), 0) + 1 FROM union_schema.history)));
 
-SELECT setval('union_schema.partners_id_seq',
-  GREATEST(1, (SELECT COALESCE(MAX(id), 0) + 1 FROM union_schema.partners)));
-
 SELECT setval('union_schema.glossary_id_seq',
   GREATEST(1, (SELECT COALESCE(MAX(id), 0) + 1 FROM union_schema.glossary)));
 

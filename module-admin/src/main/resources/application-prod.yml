@@ -16,5 +16,8 @@ logging:
     kr.co.unionsystems: INFO
     org.springframework: WARN
 
+upload:
+  dir: ${UPLOAD_DIR:/var/data/union-uploads}
+
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001,http://localhost:3002}

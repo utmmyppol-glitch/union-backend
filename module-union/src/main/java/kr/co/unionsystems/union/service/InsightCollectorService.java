@@ -16,6 +16,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * 네이버 뉴스 API를 통해 인사이트(뉴스 기사)를 자동 수집하는 스케줄러 서비스.
+ *
+ * <p><b>수집 파이프라인 (2층 필터 구조):</b></p>
+ * <ol>
+ *   <li><b>1층 — 검색 키워드:</b> 네이버 API에 질의할 키워드 목록 (SEARCH_KEYWORDS)</li>
+ *   <li><b>2층 — 화이트리스트/블랙리스트:</b> 검색 결과를 추가 필터링하여 관련성 높은 기사만 저장</li>
+ * </ol>
+ *
+ * <p><b>실행 주기:</b> 매일 07:00, 19:00 (서버 시간 기준)</p>
+ * <p><b>중복 방지:</b> sourceUrl UNIQUE 제약 + existsBySourceUrl 사전 확인</p>
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -49,7 +61,7 @@ public class InsightCollectorService {
     private static final DateTimeFormatter PUB_DATE_FORMAT =
             DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 
-    // ── 도메인 → 언론사명 매핑 ──
+    // ── 도메인 → 언론사명 매핑 (매핑에 없는 도메인은 호스트명을 그대로 사용) ──
     private static final Map<String, String> SOURCE_NAME_MAP = Map.ofEntries(
             Map.entry("zdnet.co.kr", "ZDNet Korea"),
             Map.entry("etnews.com", "전자신문"),
@@ -78,6 +90,10 @@ public class InsightCollectorService {
 
     private static final String COLLECT_CRON = "0 0 7,19 * * *"; // 매일 07:00, 19:00
 
+    /**
+     * 뉴스 수집 메인 메서드. 스케줄러 또는 관리자 수동 트리거로 실행된다.
+     * 각 검색 키워드 × 최대 100건을 조회 → 화이트·블랙 필터 → 중복 확인 → OG 이미지 추출 → 저장.
+     */
     @Scheduled(cron = COLLECT_CRON)
     public void collectInsights() {
         log.info("=== Insight collection started ===");
@@ -153,7 +169,7 @@ public class InsightCollectorService {
 
     private boolean matchesBlacklist(String text) {
         for (String kw : BLACKLIST_KEYWORDS) {
-            if (text.contains(kw)) return true;
+            if (text.contains(kw.toLowerCase())) return true;
         }
         return false;
     }
@@ -180,6 +196,10 @@ public class InsightCollectorService {
         }
     }
 
+    /**
+     * 기사 URL에서 og:image 메타 태그를 파싱하여 썸네일 URL을 추출한다.
+     * 네트워크 오류 시 null을 반환하여 수집을 중단하지 않는다.
+     */
     private String fetchOgImage(String url) {
         try {
             Document doc = Jsoup.connect(url)
