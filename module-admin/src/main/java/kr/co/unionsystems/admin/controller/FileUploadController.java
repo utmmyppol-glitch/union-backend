@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static java.util.Map.entry;
+
 @RestController
 public class FileUploadController {
 
@@ -28,6 +30,11 @@ public class FileUploadController {
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final Set<String> ALLOWED_TYPES = Set.of(
             "image/jpeg", "image/png", "image/webp"
+    );
+    private static final Map<String, String> TYPE_TO_EXT = Map.ofEntries(
+            entry("image/jpeg", ".jpg"),
+            entry("image/png", ".png"),
+            entry("image/webp", ".webp")
     );
 
     private final SiteAccessValidator siteAccessValidator;
@@ -64,10 +71,7 @@ public class FileUploadController {
         }
 
         String originalName = file.getOriginalFilename();
-        String ext = "";
-        if (originalName != null && originalName.contains(".")) {
-            ext = originalName.substring(originalName.lastIndexOf('.'));
-        }
+        String ext = TYPE_TO_EXT.getOrDefault(contentType, "");
         String newFileName = UUID.randomUUID() + ext;
 
         try {

@@ -47,10 +47,16 @@ public class InquiryService {
 
     @Transactional
     public InquiryResponse updateStatus(Long id, String status) {
+        if (status == null || status.isBlank())
+            throw new IllegalArgumentException("status 값이 필요합니다");
         Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다: " + id));
 
-        inquiry.setStatus(InquiryStatus.valueOf(status));
+        try {
+            inquiry.setStatus(InquiryStatus.valueOf(status));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + status);
+        }
         Inquiry updated = inquiryRepository.save(inquiry);
         log.info("Inquiry status updated: id={}, status={}", id, status);
 

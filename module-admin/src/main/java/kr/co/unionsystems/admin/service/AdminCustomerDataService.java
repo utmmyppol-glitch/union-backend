@@ -76,9 +76,15 @@ public class AdminCustomerDataService {
         siteAccessValidator.validateSiteAccess(site);
         if (!"dataware".equals(siteAccessValidator.normalizeSite(site)))
             throw new IllegalArgumentException("교육 신청은 dataware 사이트에서만 관리할 수 있습니다");
+        if (status == null || status.isBlank())
+            throw new IllegalArgumentException("status 값이 필요합니다");
         Education e = datawareEducationRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("교육 신청을 찾을 수 없습니다: " + id));
-        e.setStatus(Education.EducationStatus.valueOf(status));
+        try {
+            e.setStatus(Education.EducationStatus.valueOf(status));
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + status);
+        }
         return toEducationResponse(datawareEducationRepo.save(e));
     }
 
@@ -95,9 +101,15 @@ public class AdminCustomerDataService {
         siteAccessValidator.validateSiteAccess(site);
         if (!"dataware".equals(siteAccessValidator.normalizeSite(site)))
             throw new IllegalArgumentException("세미나 신청은 dataware 사이트에서만 관리할 수 있습니다");
+        if (status == null || status.isBlank())
+            throw new IllegalArgumentException("status 값이 필요합니다");
         Seminar sm = datawareSeminarRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("세미나 신청을 찾을 수 없습니다: " + id));
-        sm.setStatus(Seminar.SeminarStatus.valueOf(status));
+        try {
+            sm.setStatus(Seminar.SeminarStatus.valueOf(status));
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + status);
+        }
         return toSeminarResponse(datawareSeminarRepo.save(sm));
     }
 
