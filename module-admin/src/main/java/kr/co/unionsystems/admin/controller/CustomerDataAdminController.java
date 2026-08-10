@@ -38,4 +38,36 @@ public class CustomerDataAdminController {
             @PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(adminCustomerDataService.getSeminars(site, pageable));
     }
+
+    @PutMapping("/educations/{id}")
+    public ResponseEntity<EducationAdminResponse> updateEducation(
+            @PathVariable String site, @PathVariable Long id,
+            @RequestBody java.util.Map<String, String> body) {
+        return ResponseEntity.ok(adminCustomerDataService.updateEducationStatus(site, id, body.get("status")));
+    }
+
+    @DeleteMapping("/educations/{id}")
+    public ResponseEntity<Void> deleteEducation(@PathVariable String site, @PathVariable Long id) {
+        adminCustomerDataService.deleteEducation(site, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/seminars/{id}")
+    public ResponseEntity<SeminarAdminResponse> updateSeminar(
+            @PathVariable String site, @PathVariable Long id,
+            @RequestBody java.util.Map<String, String> body) {
+        return ResponseEntity.ok(adminCustomerDataService.updateSeminarStatus(site, id, body.get("status")));
+    }
+
+    @DeleteMapping("/seminars/{id}")
+    public ResponseEntity<Void> deleteSeminar(@PathVariable String site, @PathVariable Long id) {
+        adminCustomerDataService.deleteSeminar(site, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/downloads/{id}")
+    public ResponseEntity<Void> deleteDownload(@PathVariable String site, @PathVariable Long id) {
+        adminCustomerDataService.deleteDownload(site, id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -63,7 +63,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/union/insights").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/customer-stories/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/union/banners/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/union/client-logos/**").permitAll()
                         // module-union public POST
                         .requestMatchers(HttpMethod.POST, "/api/union/inquiries").permitAll()
@@ -77,15 +76,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/union/customer-stories/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/union/inquiries/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/union/inquiries/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/union/banners/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/union/banners/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/union/banners/**").authenticated()
 
                         // ── module-dataware public GET ──
                         .requestMatchers(HttpMethod.GET, "/api/dataware/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/customer-stories/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/dataware/banners/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/client-logos/**").permitAll()
                         // module-dataware public POST
                         .requestMatchers(HttpMethod.POST, "/api/dataware/inquiries").permitAll()
@@ -106,9 +101,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/dataware/inquiries/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/educations/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/dataware/seminars/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/dataware/banners/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/dataware/banners/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/dataware/banners/**").authenticated()
 
                         // ── module-admin ──
                         .requestMatchers(HttpMethod.POST, "/api/admin/login").permitAll()

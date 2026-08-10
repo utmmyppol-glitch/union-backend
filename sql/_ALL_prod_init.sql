@@ -32,16 +32,6 @@ CREATE TABLE common.admins (
 -- UNION_SCHEMA
 -- =============================================
 
-CREATE TABLE union_schema.banners (
-    id          BIGSERIAL PRIMARY KEY,
-    title       VARCHAR(255) NOT NULL,
-    image_url   VARCHAR(255),
-    link_url    VARCHAR(255),
-    position    VARCHAR(255) NOT NULL,
-    is_active   BOOLEAN DEFAULT TRUE,
-    sort_order  INTEGER,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 CREATE TABLE union_schema.posts (
     id              BIGSERIAL PRIMARY KEY,
@@ -109,16 +99,6 @@ CREATE TABLE union_schema.downloads (
 -- DATAWARE_SCHEMA
 -- =============================================
 
-CREATE TABLE dataware_schema.banners (
-    id          BIGSERIAL PRIMARY KEY,
-    title       VARCHAR(255) NOT NULL,
-    image_url   VARCHAR(255),
-    link_url    VARCHAR(255),
-    position    VARCHAR(255) NOT NULL,
-    is_active   BOOLEAN DEFAULT TRUE,
-    sort_order  INTEGER,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 CREATE TABLE dataware_schema.products (
     id              BIGSERIAL PRIMARY KEY,
@@ -252,12 +232,6 @@ INSERT INTO common.admins (username, password, role, site) VALUES
 -- UNION_SCHEMA
 -- =============================================
 
--- 배너
-INSERT INTO union_schema.banners (title, image_url, link_url, position, is_active, sort_order) VALUES
-('유니온시스템즈 메인 배너',      '/images/union/hero-1.jpg',  '/about',     'HERO',      true, 1),
-('IT 인프라 솔루션 소개',          '/images/union/hero-2.jpg',  '/solutions', 'HERO',      true, 2),
-('2026 하반기 프로모션',           '/images/union/promo-1.jpg', '/event',     'PROMOTION', true, 1),
-('신규 고객 할인 이벤트',          '/images/union/popup-1.jpg', '/contact',   'POPUP',     true, 1);
 
 -- 게시글
 INSERT INTO union_schema.posts (title, content, excerpt, category, thumbnail_url, published, view_count) VALUES
@@ -309,11 +283,6 @@ INSERT INTO union_schema.downloads (name, company, phone, email, file_type, cons
 -- DATAWARE_SCHEMA
 -- =============================================
 
--- 배너
-INSERT INTO dataware_schema.banners (title, image_url, link_url, position, is_active, sort_order) VALUES
-('데이터웨어 메인 배너',          '/images/dw/hero-1.jpg',  '/products',  'HERO',      true, 1),
-('DA# 데이터 모델링 도구',        '/images/dw/hero-2.jpg',  '/products/da-sharp', 'HERO', true, 2),
-('MetaSharp 메타데이터 관리',      '/images/dw/promo-1.jpg', '/products/meta-sharp', 'PROMOTION', true, 1);
 
 -- 제품
 INSERT INTO dataware_schema.products (name, slug, category, subtitle, description, features, icon_url, thumbnail_url, certification, sort_order, published) VALUES

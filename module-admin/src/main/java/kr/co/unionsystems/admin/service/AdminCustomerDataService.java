@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import kr.co.unionsystems.dataware.entity.Education;
+import kr.co.unionsystems.dataware.entity.Seminar;
 
 @Service
 @Slf4j
@@ -67,6 +69,54 @@ public class AdminCustomerDataService {
         }
         return datawareSeminarRepo.findAllByOrderByCreatedAtDesc(pageable)
                 .map(this::toSeminarResponse);
+    }
+
+    @Transactional
+    public EducationAdminResponse updateEducationStatus(String site, Long id, String status) {
+        siteAccessValidator.validateSiteAccess(site);
+        if (!"dataware".equals(siteAccessValidator.normalizeSite(site)))
+            throw new IllegalArgumentException("교육 신청은 dataware 사이트에서만 관리할 수 있습니다");
+        Education e = datawareEducationRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("교육 신청을 찾을 수 없습니다: " + id));
+        e.setStatus(Education.EducationStatus.valueOf(status));
+        return toEducationResponse(datawareEducationRepo.save(e));
+    }
+
+    @Transactional
+    public void deleteEducation(String site, Long id) {
+        siteAccessValidator.validateSiteAccess(site);
+        if (!"dataware".equals(siteAccessValidator.normalizeSite(site)))
+            throw new IllegalArgumentException("교육 신청은 dataware 사이트에서만 관리할 수 있습니다");
+        datawareEducationRepo.deleteById(id);
+    }
+
+    @Transactional
+    public SeminarAdminResponse updateSeminarStatus(String site, Long id, String status) {
+        siteAccessValidator.validateSiteAccess(site);
+        if (!"dataware".equals(siteAccessValidator.normalizeSite(site)))
+            throw new IllegalArgumentException("세미나 신청은 dataware 사이트에서만 관리할 수 있습니다");
+        Seminar sm = datawareSeminarRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("세미나 신청을 찾을 수 없습니다: " + id));
+        sm.setStatus(Seminar.SeminarStatus.valueOf(status));
+        return toSeminarResponse(datawareSeminarRepo.save(sm));
+    }
+
+    @Transactional
+    public void deleteSeminar(String site, Long id) {
+        siteAccessValidator.validateSiteAccess(site);
+        if (!"dataware".equals(siteAccessValidator.normalizeSite(site)))
+            throw new IllegalArgumentException("세미나 신청은 dataware 사이트에서만 관리할 수 있습니다");
+        datawareSeminarRepo.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteDownload(String site, Long id) {
+        siteAccessValidator.validateSiteAccess(site);
+        if ("union".equals(siteAccessValidator.normalizeSite(site))) {
+            unionDownloadRepo.deleteById(id);
+        } else {
+            datawareDownloadRepo.deleteById(id);
+        }
     }
 
     private DownloadAdminResponse toUnionDownloadResponse(kr.co.unionsystems.union.entity.Download d) {
