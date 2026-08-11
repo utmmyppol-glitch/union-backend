@@ -1,52 +1,13 @@
 package kr.co.unionsystems.dataware.entity;
 
 import jakarta.persistence.*;
+import kr.co.unionsystems.common.entity.BaseCustomerStory;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Entity(name = "DatawareCustomerStory")
 @Table(name = "customer_stories", schema = "dataware_schema")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CustomerStory {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String company;
-
-    @Column(unique = true)
-    private String slug;
-
-    private String industry;
-
-    @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
-    private String thumbnailUrl;
-
-    private String logoUrl;
-
-    @Column(columnDefinition = "TEXT")
-    private String detailJson;
-
-    @Builder.Default
-    private Boolean published = false;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+@Getter @Setter @NoArgsConstructor
+@SuperBuilder
+public class CustomerStory extends BaseCustomerStory {
 }

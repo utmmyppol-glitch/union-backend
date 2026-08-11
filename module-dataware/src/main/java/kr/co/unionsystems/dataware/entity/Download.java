@@ -1,44 +1,15 @@
 package kr.co.unionsystems.dataware.entity;
 
 import jakarta.persistence.*;
+import kr.co.unionsystems.common.entity.BaseDownload;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Entity(name = "DatawareDownload")
 @Table(name = "downloads", schema = "dataware_schema")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Download {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String company;
-
-    @Column(nullable = false)
-    private String phone;
-
-    @Column(nullable = false)
-    private String email;
-
-    private String fileType;
-
-    private Boolean consentPrivacy;
+@Getter @Setter @NoArgsConstructor
+@SuperBuilder
+public class Download extends BaseDownload {
 
     private Boolean consentThirdParty;
-
-    private Boolean consentMarketing;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
 }

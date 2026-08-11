@@ -69,8 +69,8 @@ public class AdminMenuService {
                     .name(request.getName())
                     .url(request.getUrl())
                     .menuType(request.getMenuType() != null ?
-                            kr.co.unionsystems.union.entity.Menu.MenuType.valueOf(request.getMenuType()) :
-                            kr.co.unionsystems.union.entity.Menu.MenuType.CONTENT)
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()) :
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.CONTENT)
                     .sortOrder(request.getSortOrder() != null ? request.getSortOrder() : 0)
                     .depth(request.getDepth() != null ? request.getDepth() : 0)
                     .isExposed(request.getIsExposed() != null ? request.getIsExposed() : true)
@@ -82,8 +82,8 @@ public class AdminMenuService {
                     .name(request.getName())
                     .url(request.getUrl())
                     .menuType(request.getMenuType() != null ?
-                            kr.co.unionsystems.dataware.entity.Menu.MenuType.valueOf(request.getMenuType()) :
-                            kr.co.unionsystems.dataware.entity.Menu.MenuType.CONTENT)
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()) :
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.CONTENT)
                     .sortOrder(request.getSortOrder() != null ? request.getSortOrder() : 0)
                     .depth(request.getDepth() != null ? request.getDepth() : 0)
                     .isExposed(request.getIsExposed() != null ? request.getIsExposed() : true)
@@ -104,7 +104,7 @@ public class AdminMenuService {
             menu.setName(request.getName());
             menu.setUrl(request.getUrl());
             if (request.getMenuType() != null) {
-                menu.setMenuType(kr.co.unionsystems.union.entity.Menu.MenuType.valueOf(request.getMenuType()));
+                menu.setMenuType(kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()));
             }
             if (request.getSortOrder() != null) menu.setSortOrder(request.getSortOrder());
             if (request.getDepth() != null) menu.setDepth(request.getDepth());
@@ -117,7 +117,7 @@ public class AdminMenuService {
             menu.setName(request.getName());
             menu.setUrl(request.getUrl());
             if (request.getMenuType() != null) {
-                menu.setMenuType(kr.co.unionsystems.dataware.entity.Menu.MenuType.valueOf(request.getMenuType()));
+                menu.setMenuType(kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()));
             }
             if (request.getSortOrder() != null) menu.setSortOrder(request.getSortOrder());
             if (request.getDepth() != null) menu.setDepth(request.getDepth());

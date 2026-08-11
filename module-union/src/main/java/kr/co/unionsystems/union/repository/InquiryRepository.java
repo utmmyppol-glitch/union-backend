@@ -1,7 +1,7 @@
 package kr.co.unionsystems.union.repository;
 
 import kr.co.unionsystems.union.entity.Inquiry;
-import kr.co.unionsystems.union.entity.Inquiry.InquiryStatus;
+import kr.co.unionsystems.common.entity.BaseInquiry.InquiryStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

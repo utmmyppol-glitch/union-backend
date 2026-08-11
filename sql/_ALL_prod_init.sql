@@ -57,6 +57,7 @@ CREATE TABLE union_schema.inquiries (
     status          VARCHAR(255) NOT NULL DEFAULT 'NEW',
     assignee        VARCHAR(255),
     consent_privacy BOOLEAN,
+    file_url        VARCHAR(500),
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -142,6 +143,7 @@ CREATE TABLE dataware_schema.inquiries (
     assignee            VARCHAR(255),
     consent_privacy     BOOLEAN,
     consent_third_party BOOLEAN,
+    file_url            VARCHAR(500),
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

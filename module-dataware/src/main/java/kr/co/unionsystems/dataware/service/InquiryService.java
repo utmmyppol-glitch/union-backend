@@ -3,7 +3,7 @@ package kr.co.unionsystems.dataware.service;
 import kr.co.unionsystems.dataware.dto.InquiryRequest;
 import kr.co.unionsystems.dataware.dto.InquiryResponse;
 import kr.co.unionsystems.dataware.entity.Inquiry;
-import kr.co.unionsystems.dataware.entity.Inquiry.InquiryStatus;
+import kr.co.unionsystems.common.entity.BaseInquiry.InquiryStatus;
 import kr.co.unionsystems.dataware.repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +30,27 @@ public class InquiryService {
                 .product(request.getProduct())
                 .consentPrivacy(request.getConsentPrivacy())
                 .consentThirdParty(request.getConsentThirdParty())
+                .status(InquiryStatus.NEW)
+                .build();
+
+        Inquiry saved = inquiryRepository.save(inquiry);
+        log.info("New inquiry created: id={}, company={}", saved.getId(), saved.getCompany());
+
+        return InquiryResponse.from(saved);
+    }
+
+    @Transactional
+    public InquiryResponse createInquiry(InquiryRequest request, String fileUrl) {
+        Inquiry inquiry = Inquiry.builder()
+                .name(request.getName())
+                .company(request.getCompany())
+                .phone(request.getPhone())
+                .email(request.getEmail())
+                .message(request.getMessage())
+                .product(request.getProduct())
+                .consentPrivacy(request.getConsentPrivacy())
+                .consentThirdParty(request.getConsentThirdParty())
+                .fileUrl(fileUrl)
                 .status(InquiryStatus.NEW)
                 .build();
 
