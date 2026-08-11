@@ -18,7 +18,7 @@ RUN chmod +x gradlew && ./gradlew dependencies --no-daemon || true
 
 # 소스 복사 & 빌드
 COPY . .
-RUN ./gradlew :module-admin:bootJar --no-daemon -x test
+RUN chmod +x gradlew && ./gradlew :module-admin:bootJar --no-daemon -x test
 
 # ---- Stage 2: Runtime ----
 FROM eclipse-temurin:17-jre
@@ -27,6 +27,6 @@ WORKDIR /app
 
 COPY --from=builder /app/module-admin/build/libs/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
