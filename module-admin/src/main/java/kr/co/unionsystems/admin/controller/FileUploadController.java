@@ -12,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -28,6 +32,7 @@ public class FileUploadController {
 
     private static final Logger log = LoggerFactory.getLogger(FileUploadController.class);
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final int MAX_DIMENSION = 400; // 리사이즈 최대 폭/높이 (px)
     private static final Set<String> ALLOWED_TYPES = Set.of(
             "image/jpeg", "image/png", "image/webp"
     );
@@ -81,8 +86,14 @@ public class FileUploadController {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "잘못된 파일 경로입니다"));
             }
-            file.transferTo(targetPath.toFile());
-            log.info("File uploaded: {} -> {}", originalName, targetPath);
+
+            // 이미지 리사이즈 (최대 400px, 비율 유지, 투명 보존)
+            BufferedImage resized = resizeImage(file.getBytes(), contentType);
+            String formatName = contentType.equals("image/png") ? "png"
+                    : contentType.equals("image/webp") ? "webp" : "jpg";
+            ImageIO.write(resized, formatName, targetPath.toFile());
+            log.info("File uploaded & resized: {} -> {} ({}x{})",
+                    originalName, targetPath, resized.getWidth(), resized.getHeight());
 
             String url = "/uploads/" + newFileName;
             return ResponseEntity.ok(Map.of(
@@ -94,6 +105,51 @@ public class FileUploadController {
             return ResponseEntity.internalServerError()
                     .body(Map.of("error", "파일 저장에 실패했습니다"));
         }
+    }
+
+    /**
+     * 이미지 리사이즈 — 최대 MAX_DIMENSION px 이내로 축소, 비율 유지, PNG 투명 보존.
+     * 이미 작으면 원본 그대로 반환.
+     */
+    private BufferedImage resizeImage(byte[] imageBytes, String contentType) throws IOException {
+        BufferedImage original = ImageIO.read(new ByteArrayInputStream(imageBytes));
+        if (original == null) throw new IOException("이미지를 읽을 수 없습니다");
+
+        int w = original.getWidth();
+        int h = original.getHeight();
+
+        // 이미 작으면 투명 보존만 처리하고 반환
+        if (w <= MAX_DIMENSION && h <= MAX_DIMENSION) {
+            if (contentType.equals("image/png") && original.getType() != BufferedImage.TYPE_INT_ARGB) {
+                BufferedImage rgba = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = rgba.createGraphics();
+                g.drawImage(original, 0, 0, null);
+                g.dispose();
+                return rgba;
+            }
+            return original;
+        }
+
+        // 비율 유지 축소
+        double scale = Math.min((double) MAX_DIMENSION / w, (double) MAX_DIMENSION / h);
+        int newW = (int) Math.round(w * scale);
+        int newH = (int) Math.round(h * scale);
+
+        // PNG → ARGB (투명 보존), 나머지 → RGB
+        int imageType = contentType.equals("image/png")
+                ? BufferedImage.TYPE_INT_ARGB
+                : BufferedImage.TYPE_INT_RGB;
+        BufferedImage resized = new BufferedImage(newW, newH, imageType);
+        Graphics2D g = resized.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        if (contentType.equals("image/png")) {
+            g.setComposite(AlphaComposite.Src);
+        }
+        g.drawImage(original, 0, 0, newW, newH, null);
+        g.dispose();
+        return resized;
     }
 
     /** 이미지 서빙 (공개) */
