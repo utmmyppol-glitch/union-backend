@@ -84,17 +84,6 @@ CREATE TABLE union_schema.client_logos (
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE union_schema.downloads (
-    id                  BIGSERIAL PRIMARY KEY,
-    name                VARCHAR(255) NOT NULL,
-    company             VARCHAR(255) NOT NULL,
-    phone               VARCHAR(255) NOT NULL,
-    email               VARCHAR(255) NOT NULL,
-    file_type           VARCHAR(255),
-    consent_privacy     BOOLEAN,
-    consent_marketing   BOOLEAN,
-    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 -- =============================================
 -- DATAWARE_SCHEMA
@@ -276,10 +265,6 @@ INSERT INTO union_schema.client_logos (name, logo_url, sort_order, is_active) VA
 ('SK하이닉스', '/images/union/clients/skhynix.png',  4, true),
 ('KB금융그룹', '/images/union/clients/kb.png',       5, true);
 
--- 다운로드 신청
-INSERT INTO union_schema.downloads (name, company, phone, email, file_type, consent_privacy, consent_marketing) VALUES
-('정수진', '카카오',     '010-4567-8901', 'jung@kakao.com',    '회사소개서',   true, true),
-('최동현', '네이버',     '010-5678-9012', 'choi@naver.com',    '솔루션 브로슈어', true, false);
 
 -- =============================================
 -- DATAWARE_SCHEMA

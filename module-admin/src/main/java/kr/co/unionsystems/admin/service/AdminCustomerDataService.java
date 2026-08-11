@@ -16,19 +16,16 @@ import kr.co.unionsystems.dataware.entity.Seminar;
 @Slf4j
 public class AdminCustomerDataService {
 
-    private final kr.co.unionsystems.union.repository.DownloadRepository unionDownloadRepo;
     private final kr.co.unionsystems.dataware.repository.DownloadRepository datawareDownloadRepo;
     private final kr.co.unionsystems.dataware.repository.EducationRepository datawareEducationRepo;
     private final kr.co.unionsystems.dataware.repository.SeminarRepository datawareSeminarRepo;
     private final SiteAccessValidator siteAccessValidator;
 
     public AdminCustomerDataService(
-            @Qualifier("unionDownloadRepository") kr.co.unionsystems.union.repository.DownloadRepository unionDownloadRepo,
             @Qualifier("datawareDownloadRepository") kr.co.unionsystems.dataware.repository.DownloadRepository datawareDownloadRepo,
             kr.co.unionsystems.dataware.repository.EducationRepository datawareEducationRepo,
             kr.co.unionsystems.dataware.repository.SeminarRepository datawareSeminarRepo,
             SiteAccessValidator siteAccessValidator) {
-        this.unionDownloadRepo = unionDownloadRepo;
         this.datawareDownloadRepo = datawareDownloadRepo;
         this.datawareEducationRepo = datawareEducationRepo;
         this.datawareSeminarRepo = datawareSeminarRepo;
@@ -40,13 +37,11 @@ public class AdminCustomerDataService {
         siteAccessValidator.validateSiteAccess(site);
         String normalized = siteAccessValidator.normalizeSite(site);
 
-        if ("union".equals(normalized)) {
-            return unionDownloadRepo.findAllByOrderByCreatedAtDesc(pageable)
-                    .map(this::toUnionDownloadResponse);
-        } else {
-            return datawareDownloadRepo.findAllByOrderByCreatedAtDesc(pageable)
-                    .map(this::toDatawareDownloadResponse);
+        if (!"dataware".equals(normalized)) {
+            throw new IllegalArgumentException("다운로드 조회는 dataware 사이트에서만 가능합니다");
         }
+        return datawareDownloadRepo.findAllByOrderByCreatedAtDesc(pageable)
+                .map(this::toDatawareDownloadResponse);
     }
 
     @Transactional(readOnly = true)
@@ -124,19 +119,10 @@ public class AdminCustomerDataService {
     @Transactional
     public void deleteDownload(String site, Long id) {
         siteAccessValidator.validateSiteAccess(site);
-        if ("union".equals(siteAccessValidator.normalizeSite(site))) {
-            unionDownloadRepo.deleteById(id);
-        } else {
-            datawareDownloadRepo.deleteById(id);
+        if (!"dataware".equals(siteAccessValidator.normalizeSite(site))) {
+            throw new IllegalArgumentException("다운로드 삭제는 dataware 사이트에서만 가능합니다");
         }
-    }
-
-    private DownloadAdminResponse toUnionDownloadResponse(kr.co.unionsystems.union.entity.Download d) {
-        return DownloadAdminResponse.builder()
-                .id(d.getId()).name(d.getName()).company(d.getCompany())
-                .phone(d.getPhone()).email(d.getEmail()).fileType(d.getFileType())
-                .createdAt(d.getCreatedAt())
-                .build();
+        datawareDownloadRepo.deleteById(id);
     }
 
     private DownloadAdminResponse toDatawareDownloadResponse(kr.co.unionsystems.dataware.entity.Download d) {

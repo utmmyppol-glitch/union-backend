@@ -66,8 +66,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/union/client-logos/**").permitAll()
                         // module-union public POST
                         .requestMatchers(HttpMethod.POST, "/api/union/inquiries").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/union/downloads").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/union/downloads/brochure").permitAll()
                         // module-union admin-only
                         .requestMatchers(HttpMethod.POST, "/api/union/posts/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/union/posts/**").authenticated()
