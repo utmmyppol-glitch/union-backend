@@ -53,7 +53,9 @@ while [ "$i" -lt 15 ]; do
 done
 
 if [ "$OK" -ne 1 ]; then
-  echo "==> Health check failed for $NEW, rolling back (old container untouched)"
+  echo "==> Health check failed for $NEW, printing logs for debugging:"
+  docker logs "$NEW" --tail 80 2>&1 || true
+  echo "==> Rolling back (old container untouched)"
   docker rm -f "$NEW" >/dev/null 2>&1 || true
   exit 1
 fi
