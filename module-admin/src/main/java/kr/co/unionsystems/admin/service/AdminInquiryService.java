@@ -42,11 +42,25 @@ public class AdminInquiryService {
         String kw = (search != null && !search.isBlank()) ? search.trim() : null;
 
         if ("union".equals(normalized)) {
-            return unionInquiryRepo.searchInquiries(st, kw, pageable)
-                    .map(this::toUnionResponse);
+            if (st != null && kw != null) {
+                return unionInquiryRepo.searchByStatusAndKeyword(st, kw, pageable).map(this::toUnionResponse);
+            } else if (st != null) {
+                return unionInquiryRepo.findByStatusOrderByCreatedAtDesc(st, pageable).map(this::toUnionResponse);
+            } else if (kw != null) {
+                return unionInquiryRepo.searchByKeyword(kw, pageable).map(this::toUnionResponse);
+            } else {
+                return unionInquiryRepo.findAllByOrderByCreatedAtDesc(pageable).map(this::toUnionResponse);
+            }
         } else {
-            return datawareInquiryRepo.searchInquiries(st, kw, pageable)
-                    .map(this::toDatawareResponse);
+            if (st != null && kw != null) {
+                return datawareInquiryRepo.searchByStatusAndKeyword(st, kw, pageable).map(this::toDatawareResponse);
+            } else if (st != null) {
+                return datawareInquiryRepo.findByStatusOrderByCreatedAtDesc(st, pageable).map(this::toDatawareResponse);
+            } else if (kw != null) {
+                return datawareInquiryRepo.searchByKeyword(kw, pageable).map(this::toDatawareResponse);
+            } else {
+                return datawareInquiryRepo.findAllByOrderByCreatedAtDesc(pageable).map(this::toDatawareResponse);
+            }
         }
     }
 
