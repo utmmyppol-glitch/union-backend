@@ -36,6 +36,8 @@ docker run -d --name "$NEW" --network "$NETWORK" --restart unless-stopped \
   -e MAIL_PASSWORD="${MAIL_PASSWORD:-}" \
   -e JWT_SECRET="${JWT_SECRET:?JWT_SECRET not set}" \
   -e CORS_ALLOWED_ORIGINS="${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:3001,http://localhost:3002}" \
+  -e NAVER_APIGW_KEY_ID="${NAVER_APIGW_KEY_ID:-}" \
+  -e NAVER_APIGW_KEY="${NAVER_APIGW_KEY:-}" \
   "$IMAGE"
 
 echo "==> Health checking $NEW"
