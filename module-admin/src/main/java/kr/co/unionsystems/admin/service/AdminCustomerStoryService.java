@@ -54,16 +54,18 @@ public class AdminCustomerStoryService {
         String s = siteAccessValidator.normalizeSite(site);
         if ("union".equals(s)) {
             var story = kr.co.unionsystems.union.entity.CustomerStory.builder()
-                    .company(req.getCompany()).industry(req.getIndustry())
+                    .company(req.getCompany()).slug(req.getSlug()).industry(req.getIndustry())
                     .title(req.getTitle()).content(req.getContent())
                     .thumbnailUrl(req.getThumbnailUrl()).logoUrl(req.getLogoUrl())
+                    .detailJson(req.getDetailJson())
                     .published(req.getPublished() != null ? req.getPublished() : false).build();
             return fromUnion(unionStoryRepo.save(story));
         }
         var story = kr.co.unionsystems.dataware.entity.CustomerStory.builder()
-                .company(req.getCompany()).industry(req.getIndustry())
+                .company(req.getCompany()).slug(req.getSlug()).industry(req.getIndustry())
                 .title(req.getTitle()).content(req.getContent())
                 .thumbnailUrl(req.getThumbnailUrl()).logoUrl(req.getLogoUrl())
+                .detailJson(req.getDetailJson())
                 .published(req.getPublished() != null ? req.getPublished() : false).build();
         return fromDataware(datawareStoryRepo.save(story));
     }
@@ -76,22 +78,26 @@ public class AdminCustomerStoryService {
             var story = unionStoryRepo.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("고객 사례를 찾을 수 없습니다: " + id));
             story.setCompany(req.getCompany());
+            story.setSlug(req.getSlug());
             story.setIndustry(req.getIndustry());
             story.setTitle(req.getTitle());
             story.setContent(req.getContent());
             story.setThumbnailUrl(req.getThumbnailUrl());
             story.setLogoUrl(req.getLogoUrl());
+            story.setDetailJson(req.getDetailJson());
             if (req.getPublished() != null) story.setPublished(req.getPublished());
             return fromUnion(unionStoryRepo.save(story));
         }
         var story = datawareStoryRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("고객 사례를 찾을 수 없습니다: " + id));
         story.setCompany(req.getCompany());
+        story.setSlug(req.getSlug());
         story.setIndustry(req.getIndustry());
         story.setTitle(req.getTitle());
         story.setContent(req.getContent());
         story.setThumbnailUrl(req.getThumbnailUrl());
         story.setLogoUrl(req.getLogoUrl());
+        story.setDetailJson(req.getDetailJson());
         if (req.getPublished() != null) story.setPublished(req.getPublished());
         return fromDataware(datawareStoryRepo.save(story));
     }
@@ -106,18 +112,20 @@ public class AdminCustomerStoryService {
 
     private CustomerStoryAdminResponse fromUnion(kr.co.unionsystems.union.entity.CustomerStory cs) {
         return CustomerStoryAdminResponse.builder()
-                .id(cs.getId()).company(cs.getCompany()).industry(cs.getIndustry())
+                .id(cs.getId()).company(cs.getCompany()).slug(cs.getSlug()).industry(cs.getIndustry())
                 .title(cs.getTitle()).content(cs.getContent())
                 .thumbnailUrl(cs.getThumbnailUrl()).logoUrl(cs.getLogoUrl())
+                .detailJson(cs.getDetailJson())
                 .published(cs.getPublished())
                 .createdAt(cs.getCreatedAt()).updatedAt(cs.getUpdatedAt()).build();
     }
 
     private CustomerStoryAdminResponse fromDataware(kr.co.unionsystems.dataware.entity.CustomerStory cs) {
         return CustomerStoryAdminResponse.builder()
-                .id(cs.getId()).company(cs.getCompany()).industry(cs.getIndustry())
+                .id(cs.getId()).company(cs.getCompany()).slug(cs.getSlug()).industry(cs.getIndustry())
                 .title(cs.getTitle()).content(cs.getContent())
                 .thumbnailUrl(cs.getThumbnailUrl()).logoUrl(cs.getLogoUrl())
+                .detailJson(cs.getDetailJson())
                 .published(cs.getPublished())
                 .createdAt(cs.getCreatedAt()).updatedAt(cs.getUpdatedAt()).build();
     }

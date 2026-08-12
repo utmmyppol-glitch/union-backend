@@ -35,7 +35,14 @@ public class AdminContentService {
             .addProtocols("img", "src", "http", "https", "data");
 
     private String sanitizeHtml(String html) {
-        return html == null ? null : Jsoup.clean(html, HTML_SAFELIST);
+        if (html == null) return null;
+        String trimmed = html.trim();
+        // JSON 콘텐츠는 HTML 정제 건너뜀 (구조화된 페이지 데이터)
+        if ((trimmed.startsWith("{") && trimmed.endsWith("}"))
+                || (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
+            return html;
+        }
+        return Jsoup.clean(html, HTML_SAFELIST);
     }
 
     public AdminContentService(
@@ -87,6 +94,20 @@ public class AdminContentService {
             return datawareContentRepo.findByMenuIdAndRegionKey(menuId, regionKey)
                     .map(this::toDatawareResponse)
                     .orElse(null);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<ContentResponse> getAllContents(String site) {
+        siteAccessValidator.validateSiteAccess(site);
+        String normalized = siteAccessValidator.normalizeSite(site);
+
+        if ("union".equals(normalized)) {
+            return unionContentRepo.findAllByOrderByIdAsc().stream()
+                    .map(this::toUnionResponse).collect(Collectors.toList());
+        } else {
+            return datawareContentRepo.findAllByOrderByIdAsc().stream()
+                    .map(this::toDatawareResponse).collect(Collectors.toList());
         }
     }
 

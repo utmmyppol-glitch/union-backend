@@ -22,6 +22,9 @@ public class Post {
     @Column(nullable = false)
     private String title;
 
+    @Column(unique = true)
+    private String slug;
+
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -32,6 +35,9 @@ public class Post {
     private PostCategory category;
 
     private String thumbnailUrl;
+
+    @Column(columnDefinition = "TEXT")
+    private String detailJson;
 
     @Builder.Default
     private Boolean published = false;

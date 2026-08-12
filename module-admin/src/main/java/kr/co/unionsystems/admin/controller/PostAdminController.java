@@ -22,8 +22,9 @@ public class PostAdminController {
     @GetMapping
     public ResponseEntity<Page<PostAdminResponse>> getPosts(
             @PathVariable String site,
+            @RequestParam(required = false) String keyword,
             @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(adminPostService.getPosts(site, pageable));
+        return ResponseEntity.ok(adminPostService.getPosts(site, keyword, pageable));
     }
 
     @GetMapping("/{id}")
@@ -44,6 +45,17 @@ public class PostAdminController {
             @PathVariable String site, @PathVariable Long id,
             @Valid @RequestBody PostAdminRequest request) {
         return ResponseEntity.ok(adminPostService.updatePost(site, id, request));
+    }
+
+    @PatchMapping("/{id}/published")
+    public ResponseEntity<PostAdminResponse> togglePublished(
+            @PathVariable String site, @PathVariable Long id,
+            @RequestBody java.util.Map<String, Boolean> body) {
+        Boolean published = body.get("published");
+        if (published == null) {
+            throw new IllegalArgumentException("published 값은 필수입니다");
+        }
+        return ResponseEntity.ok(adminPostService.togglePublished(site, id, published));
     }
 
     @DeleteMapping("/{id}")

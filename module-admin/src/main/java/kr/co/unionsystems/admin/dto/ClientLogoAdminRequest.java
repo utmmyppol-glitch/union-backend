@@ -18,4 +18,6 @@ public class ClientLogoAdminRequest {
     private Integer sortOrder;
 
     private Boolean isActive;
+
+    private Boolean showOnHome;
 }

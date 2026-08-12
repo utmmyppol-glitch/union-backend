@@ -16,11 +16,13 @@ public class CustomerStoryResponse {
 
     private Long id;
     private String company;
+    private String slug;
     private String industry;
     private String title;
     private String content;
     private String thumbnailUrl;
     private String logoUrl;
+    private String detailJson;
     private Boolean published;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -29,11 +31,13 @@ public class CustomerStoryResponse {
         return CustomerStoryResponse.builder()
                 .id(story.getId())
                 .company(story.getCompany())
+                .slug(story.getSlug())
                 .industry(story.getIndustry())
                 .title(story.getTitle())
                 .content(story.getContent())
                 .thumbnailUrl(story.getThumbnailUrl())
                 .logoUrl(story.getLogoUrl())
+                .detailJson(story.getDetailJson())
                 .published(story.getPublished())
                 .createdAt(story.getCreatedAt())
                 .updatedAt(story.getUpdatedAt())

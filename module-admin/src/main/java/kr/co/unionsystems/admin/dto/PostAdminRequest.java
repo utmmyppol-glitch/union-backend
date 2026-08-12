@@ -13,6 +13,8 @@ public class PostAdminRequest {
     @NotBlank(message = "제목은 필수입니다")
     private String title;
 
+    private String slug;
+
     private String content;
 
     private String excerpt;
@@ -21,6 +23,8 @@ public class PostAdminRequest {
     private String category;
 
     private String thumbnailUrl;
+
+    private String detailJson;
 
     private Boolean published;
 }

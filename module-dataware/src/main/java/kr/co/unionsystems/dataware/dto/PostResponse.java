@@ -16,10 +16,12 @@ public class PostResponse {
 
     private Long id;
     private String title;
+    private String slug;
     private String content;
     private String excerpt;
     private String category;
     private String thumbnailUrl;
+    private String detailJson;
     private Boolean published;
     private Integer viewCount;
     private LocalDateTime createdAt;
@@ -29,10 +31,12 @@ public class PostResponse {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
+                .slug(post.getSlug())
                 .content(post.getContent())
                 .excerpt(post.getExcerpt())
                 .category(post.getCategory().name())
                 .thumbnailUrl(post.getThumbnailUrl())
+                .detailJson(post.getDetailJson())
                 .published(post.getPublished())
                 .viewCount(post.getViewCount())
                 .createdAt(post.getCreatedAt())

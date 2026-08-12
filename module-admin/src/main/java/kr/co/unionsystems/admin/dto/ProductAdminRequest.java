@@ -31,6 +31,8 @@ public class ProductAdminRequest {
 
     private String certification;
 
+    private String detailJson;
+
     private Integer sortOrder;
 
     private Boolean published;

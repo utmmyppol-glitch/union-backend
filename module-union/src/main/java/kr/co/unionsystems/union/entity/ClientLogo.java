@@ -1,34 +1,13 @@
 package kr.co.unionsystems.union.entity;
 
 import jakarta.persistence.*;
+import kr.co.unionsystems.common.entity.BaseClientLogo;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Entity(name = "UnionClientLogo")
 @Table(name = "client_logos", schema = "union_schema")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ClientLogo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String name;
-
-    private String logoUrl;
-
-    private Integer sortOrder;
-
-    @Builder.Default
-    private Boolean isActive = true;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+@Getter @Setter @NoArgsConstructor
+@SuperBuilder
+public class ClientLogo extends BaseClientLogo {
 }

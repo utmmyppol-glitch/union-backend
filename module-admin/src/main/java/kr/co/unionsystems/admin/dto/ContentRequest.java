@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ContentRequest {
 
-    @NotNull(message = "메뉴 ID는 필수입니다")
     private Long menuId;
 
     @NotBlank(message = "영역 키는 필수입니다")

@@ -18,9 +18,9 @@ Thumbs.db
 # Logs
 *.log
 
-# Env
-.env
-
 # Env (broadened) & local tooling
+.env
 .env*
 .claude/
+
+uploads/

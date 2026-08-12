@@ -46,13 +46,15 @@ public class AdminClientLogoService {
             var logo = kr.co.unionsystems.union.entity.ClientLogo.builder()
                     .name(req.getName()).logoUrl(req.getLogoUrl())
                     .sortOrder(req.getSortOrder())
-                    .isActive(req.getIsActive() != null ? req.getIsActive() : true).build();
+                    .isActive(req.getIsActive() != null ? req.getIsActive() : true)
+                    .showOnHome(req.getShowOnHome() != null ? req.getShowOnHome() : false).build();
             return fromUnion(unionLogoRepo.save(logo));
         }
         var logo = kr.co.unionsystems.dataware.entity.ClientLogo.builder()
                 .name(req.getName()).logoUrl(req.getLogoUrl())
                 .sortOrder(req.getSortOrder())
-                .isActive(req.getIsActive() != null ? req.getIsActive() : true).build();
+                .isActive(req.getIsActive() != null ? req.getIsActive() : true)
+                .showOnHome(req.getShowOnHome() != null ? req.getShowOnHome() : false).build();
         return fromDataware(datawareLogoRepo.save(logo));
     }
 
@@ -67,6 +69,7 @@ public class AdminClientLogoService {
             logo.setLogoUrl(req.getLogoUrl());
             if (req.getSortOrder() != null) logo.setSortOrder(req.getSortOrder());
             if (req.getIsActive() != null) logo.setIsActive(req.getIsActive());
+            if (req.getShowOnHome() != null) logo.setShowOnHome(req.getShowOnHome());
             return fromUnion(unionLogoRepo.save(logo));
         }
         var logo = datawareLogoRepo.findById(id)
@@ -75,6 +78,7 @@ public class AdminClientLogoService {
         logo.setLogoUrl(req.getLogoUrl());
         if (req.getSortOrder() != null) logo.setSortOrder(req.getSortOrder());
         if (req.getIsActive() != null) logo.setIsActive(req.getIsActive());
+        if (req.getShowOnHome() != null) logo.setShowOnHome(req.getShowOnHome());
         return fromDataware(datawareLogoRepo.save(logo));
     }
 
@@ -90,6 +94,7 @@ public class AdminClientLogoService {
         return ClientLogoAdminResponse.builder()
                 .id(l.getId()).name(l.getName()).logoUrl(l.getLogoUrl())
                 .sortOrder(l.getSortOrder()).isActive(l.getIsActive())
+                .showOnHome(l.getShowOnHome())
                 .createdAt(l.getCreatedAt()).build();
     }
 
@@ -97,6 +102,7 @@ public class AdminClientLogoService {
         return ClientLogoAdminResponse.builder()
                 .id(l.getId()).name(l.getName()).logoUrl(l.getLogoUrl())
                 .sortOrder(l.getSortOrder()).isActive(l.getIsActive())
+                .showOnHome(l.getShowOnHome())
                 .createdAt(l.getCreatedAt()).build();
     }
 }

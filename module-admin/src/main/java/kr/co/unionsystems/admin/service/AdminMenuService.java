@@ -50,10 +50,10 @@ public class AdminMenuService {
         String normalized = siteAccessValidator.normalizeSite(site);
 
         if ("union".equals(normalized)) {
-            return buildTree(unionMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
+            return buildTreeDropOrphans(unionMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
                     .map(this::toUnionResponse).collect(Collectors.toList()));
         } else {
-            return buildTree(datawareMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
+            return buildTreeDropOrphans(datawareMenuRepo.findAllByIsExposedTrueOrderBySortOrderAsc().stream()
                     .map(this::toDatawareResponse).collect(Collectors.toList()));
         }
     }
@@ -69,8 +69,8 @@ public class AdminMenuService {
                     .name(request.getName())
                     .url(request.getUrl())
                     .menuType(request.getMenuType() != null ?
-                            kr.co.unionsystems.union.entity.Menu.MenuType.valueOf(request.getMenuType()) :
-                            kr.co.unionsystems.union.entity.Menu.MenuType.CONTENT)
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()) :
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.CONTENT)
                     .sortOrder(request.getSortOrder() != null ? request.getSortOrder() : 0)
                     .depth(request.getDepth() != null ? request.getDepth() : 0)
                     .isExposed(request.getIsExposed() != null ? request.getIsExposed() : true)
@@ -82,8 +82,8 @@ public class AdminMenuService {
                     .name(request.getName())
                     .url(request.getUrl())
                     .menuType(request.getMenuType() != null ?
-                            kr.co.unionsystems.dataware.entity.Menu.MenuType.valueOf(request.getMenuType()) :
-                            kr.co.unionsystems.dataware.entity.Menu.MenuType.CONTENT)
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()) :
+                            kr.co.unionsystems.common.entity.BaseMenu.MenuType.CONTENT)
                     .sortOrder(request.getSortOrder() != null ? request.getSortOrder() : 0)
                     .depth(request.getDepth() != null ? request.getDepth() : 0)
                     .isExposed(request.getIsExposed() != null ? request.getIsExposed() : true)
@@ -104,7 +104,7 @@ public class AdminMenuService {
             menu.setName(request.getName());
             menu.setUrl(request.getUrl());
             if (request.getMenuType() != null) {
-                menu.setMenuType(kr.co.unionsystems.union.entity.Menu.MenuType.valueOf(request.getMenuType()));
+                menu.setMenuType(kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()));
             }
             if (request.getSortOrder() != null) menu.setSortOrder(request.getSortOrder());
             if (request.getDepth() != null) menu.setDepth(request.getDepth());
@@ -117,7 +117,7 @@ public class AdminMenuService {
             menu.setName(request.getName());
             menu.setUrl(request.getUrl());
             if (request.getMenuType() != null) {
-                menu.setMenuType(kr.co.unionsystems.dataware.entity.Menu.MenuType.valueOf(request.getMenuType()));
+                menu.setMenuType(kr.co.unionsystems.common.entity.BaseMenu.MenuType.valueOf(request.getMenuType()));
             }
             if (request.getSortOrder() != null) menu.setSortOrder(request.getSortOrder());
             if (request.getDepth() != null) menu.setDepth(request.getDepth());
@@ -139,6 +139,14 @@ public class AdminMenuService {
     }
 
     private List<MenuResponse> buildTree(List<MenuResponse> flatList) {
+        return buildTreeInternal(flatList, false);
+    }
+
+    private List<MenuResponse> buildTreeDropOrphans(List<MenuResponse> flatList) {
+        return buildTreeInternal(flatList, true);
+    }
+
+    private List<MenuResponse> buildTreeInternal(List<MenuResponse> flatList, boolean dropOrphans) {
         Map<Long, MenuResponse> map = new LinkedHashMap<>();
         for (MenuResponse m : flatList) {
             m.setChildren(new ArrayList<>());
@@ -152,9 +160,10 @@ public class AdminMenuService {
                 MenuResponse parent = map.get(m.getParentId());
                 if (parent != null) {
                     parent.getChildren().add(m);
-                } else {
+                } else if (!dropOrphans) {
                     roots.add(m);
                 }
+                // dropOrphans=true면 부모가 숨겨진 자식은 버림
             }
         }
         return roots;

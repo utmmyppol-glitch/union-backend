@@ -21,7 +21,6 @@ public class InquiryRequest {
     @NotBlank(message = "회사명은 필수입니다")
     private String company;
 
-    @NotBlank(message = "연락처는 필수입니다")
     private String phone;
 
     @NotBlank(message = "이메일은 필수입니다")

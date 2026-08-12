@@ -13,6 +13,8 @@ public class CustomerStoryAdminRequest {
     @NotBlank(message = "회사명은 필수입니다")
     private String company;
 
+    private String slug;
+
     private String industry;
 
     @NotBlank(message = "제목은 필수입니다")
@@ -23,6 +25,8 @@ public class CustomerStoryAdminRequest {
     private String thumbnailUrl;
 
     private String logoUrl;
+
+    private String detailJson;
 
     private Boolean published;
 }

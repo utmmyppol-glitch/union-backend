@@ -27,6 +27,20 @@ public class CustomerStoryService {
                 .map(CustomerStoryResponse::from);
     }
 
+    @Transactional(readOnly = true)
+    public CustomerStoryResponse getStory(Long id) {
+        CustomerStory story = customerStoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("고객사례를 찾을 수 없습니다: " + id));
+        return CustomerStoryResponse.from(story);
+    }
+
+    @Transactional(readOnly = true)
+    public CustomerStoryResponse getStoryBySlug(String slug) {
+        CustomerStory story = customerStoryRepository.findBySlug(slug)
+                .orElseThrow(() -> new IllegalArgumentException("고객사례를 찾을 수 없습니다: " + slug));
+        return CustomerStoryResponse.from(story);
+    }
+
     @Transactional
     public CustomerStoryResponse createStory(CustomerStory story) {
         CustomerStory saved = customerStoryRepository.save(story);
@@ -40,6 +54,7 @@ public class CustomerStoryService {
                 .orElseThrow(() -> new IllegalArgumentException("고객사례를 찾을 수 없습니다: " + id));
 
         story.setCompany(storyData.getCompany());
+        story.setSlug(storyData.getSlug());
         story.setIndustry(storyData.getIndustry());
         story.setTitle(storyData.getTitle());
         story.setContent(storyData.getContent());

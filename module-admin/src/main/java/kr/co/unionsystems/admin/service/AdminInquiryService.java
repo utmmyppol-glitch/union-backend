@@ -65,7 +65,7 @@ public class AdminInquiryService {
             var inquiry = unionInquiryRepo.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다: " + id));
             if (request.getStatus() != null) {
-                inquiry.setStatus(kr.co.unionsystems.union.entity.Inquiry.InquiryStatus.valueOf(request.getStatus()));
+                inquiry.setStatus(kr.co.unionsystems.common.entity.BaseInquiry.InquiryStatus.valueOf(request.getStatus()));
             }
             if (request.getAssignee() != null) {
                 inquiry.setAssignee(request.getAssignee());
@@ -75,7 +75,7 @@ public class AdminInquiryService {
             var inquiry = datawareInquiryRepo.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("문의를 찾을 수 없습니다: " + id));
             if (request.getStatus() != null) {
-                inquiry.setStatus(kr.co.unionsystems.dataware.entity.Inquiry.InquiryStatus.valueOf(request.getStatus()));
+                inquiry.setStatus(kr.co.unionsystems.common.entity.BaseInquiry.InquiryStatus.valueOf(request.getStatus()));
             }
             if (request.getAssignee() != null) {
                 inquiry.setAssignee(request.getAssignee());
@@ -90,6 +90,7 @@ public class AdminInquiryService {
                 .phone(i.getPhone()).email(i.getEmail()).message(i.getMessage())
                 .product(i.getProduct()).status(i.getStatus().name())
                 .assignee(i.getAssignee())
+                .consentPrivacy(i.getConsentPrivacy())
                 .createdAt(i.getCreatedAt()).updatedAt(i.getUpdatedAt())
                 .build();
     }
@@ -100,6 +101,7 @@ public class AdminInquiryService {
                 .phone(i.getPhone()).email(i.getEmail()).message(i.getMessage())
                 .product(i.getProduct()).status(i.getStatus().name())
                 .assignee(i.getAssignee())
+                .consentPrivacy(i.getConsentPrivacy())
                 .createdAt(i.getCreatedAt()).updatedAt(i.getUpdatedAt())
                 .build();
     }
