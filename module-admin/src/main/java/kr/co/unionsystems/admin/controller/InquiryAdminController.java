@@ -21,8 +21,10 @@ public class InquiryAdminController {
     @GetMapping
     public ResponseEntity<Page<InquiryAdminResponse>> getInquiries(
             @PathVariable String site,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String search,
             @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(adminInquiryService.getInquiries(site, pageable));
+        return ResponseEntity.ok(adminInquiryService.getInquiries(site, status, search, pageable));
     }
 
     @GetMapping("/{id}")
