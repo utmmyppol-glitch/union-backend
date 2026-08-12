@@ -27,15 +27,25 @@ public class AdminInquiryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<InquiryAdminResponse> getInquiries(String site, Pageable pageable) {
+    public Page<InquiryAdminResponse> getInquiries(String site, String status, String search, Pageable pageable) {
         siteAccessValidator.validateSiteAccess(site);
         String normalized = siteAccessValidator.normalizeSite(site);
 
+        kr.co.unionsystems.common.entity.BaseInquiry.InquiryStatus st = null;
+        if (status != null && !status.isBlank()) {
+            try {
+                st = kr.co.unionsystems.common.entity.BaseInquiry.InquiryStatus.valueOf(status.trim());
+            } catch (IllegalArgumentException ignored) {
+                st = null;
+            }
+        }
+        String kw = (search != null && !search.isBlank()) ? search.trim() : null;
+
         if ("union".equals(normalized)) {
-            return unionInquiryRepo.findAllByOrderByCreatedAtDesc(pageable)
+            return unionInquiryRepo.searchInquiries(st, kw, pageable)
                     .map(this::toUnionResponse);
         } else {
-            return datawareInquiryRepo.findAllByOrderByCreatedAtDesc(pageable)
+            return datawareInquiryRepo.searchInquiries(st, kw, pageable)
                     .map(this::toDatawareResponse);
         }
     }

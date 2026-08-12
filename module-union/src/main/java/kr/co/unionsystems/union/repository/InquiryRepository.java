@@ -14,6 +14,20 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     Page<Inquiry> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+    @org.springframework.data.jpa.repository.Query("SELECT i FROM Inquiry i WHERE " +
+            "(:status IS NULL OR i.status = :status) AND " +
+            "(:kw IS NULL OR LOWER(i.name) LIKE LOWER(CONCAT('%', :kw, '%')) " +
+            "OR LOWER(i.company) LIKE LOWER(CONCAT('%', :kw, '%')) " +
+            "OR LOWER(i.email) LIKE LOWER(CONCAT('%', :kw, '%')) " +
+            "OR LOWER(i.phone) LIKE LOWER(CONCAT('%', :kw, '%')) " +
+            "OR LOWER(i.product) LIKE LOWER(CONCAT('%', :kw, '%'))) " +
+            "ORDER BY i.createdAt DESC")
+    Page<Inquiry> searchInquiries(
+            @org.springframework.data.repository.query.Param("status") InquiryStatus status,
+            @org.springframework.data.repository.query.Param("kw") String kw,
+            Pageable pageable);
+
+
     List<Inquiry> findByStatus(InquiryStatus status);
 
     List<Inquiry> findByAssignee(String assignee);
