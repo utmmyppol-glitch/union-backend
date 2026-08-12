@@ -14,7 +14,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     Page<Inquiry> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    @org.springframework.data.jpa.repository.Query("SELECT i FROM Inquiry i WHERE " +
+    @org.springframework.data.jpa.repository.Query("SELECT i FROM UnionInquiry i WHERE " +
             "(:status IS NULL OR i.status = :status) AND " +
             "(:kw IS NULL OR LOWER(i.name) LIKE LOWER(CONCAT('%', :kw, '%')) " +
             "OR LOWER(i.company) LIKE LOWER(CONCAT('%', :kw, '%')) " +
